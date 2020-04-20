@@ -20,7 +20,11 @@ document.addEventListener('DOMContentLoaded', async () => {
       : Promise.resolve(),
   ];
   const [_, AudioRecorder] = await Promise.all(deferredPolyfills);
-  if (AudioRecorder) window.MediaRecorder = AudioRecorder.default;
+  if (AudioRecorder) {
+    alert('MediaRecorder polyfill loaded:');
+    window.MediaRecorder = AudioRecorder.default;
+    alert(typeof MediaRecorder);
+  }
   const App = require('./components/app').default;
   render(React.createElement(App), document.getElementById('root'));
 });

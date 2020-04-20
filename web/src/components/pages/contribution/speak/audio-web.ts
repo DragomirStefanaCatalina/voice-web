@@ -156,9 +156,12 @@ export default class AudioWeb {
     sourceNode.connect(volumeNode);
     volumeNode.connect(analyzerNode);
     analyzerNode.connect(outputNode);
+    alert('Established audio nodes.');
 
+    alert('Setting up a new MediaRecorder.');
     // and set up the recorder.
     this.recorder = new window.MediaRecorder(outputNode.stream);
+    alert('Established new MediaRecorder.');
 
     // Set up the analyzer node, and allocate an array for its data
     // FFT size 64 gives us 32 bins. But those bins hold frequencies up to
@@ -171,16 +174,22 @@ export default class AudioWeb {
     // Setup audio visualizer.
     this.jsNode = audioContext.createScriptProcessor(256, 1, 1);
     this.jsNode.connect(audioContext.destination);
+    alert('Established jsNode connection.');
 
     this.analyzerNode = analyzerNode;
     this.audioContext = audioContext;
+    alert('init(): finished.');
   }
 
   start(): Promise<void> {
+    alert('start(): started 1.');
+
     if (!this.isReady()) {
       console.error('Cannot record audio before microhphone is ready.');
       return Promise.resolve();
     }
+
+    alert('start(): started 2.');
 
     return new Promise<void>((res: Function, rej: Function) => {
       this.chunks = [];
@@ -193,10 +202,12 @@ export default class AudioWeb {
 
       // Update the stored listeners.
       this.recorderListeners.start = (e: Event) => {
+        alert('started');
         this.clear();
         res();
       };
       this.recorderListeners.dataavailable = (e: BlobEvent) => {
+        alert('dataavailable');
         this.chunks.push(e.data);
       };
 
@@ -213,6 +224,7 @@ export default class AudioWeb {
       // very frequently.
       this.startVisualize();
       this.recorder.start(20000);
+      alert('start(): finished.');
     });
   }
 
