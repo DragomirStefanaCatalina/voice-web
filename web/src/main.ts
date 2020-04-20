@@ -2,6 +2,7 @@ import 'focus-visible';
 import * as React from 'react';
 import { render } from 'react-dom';
 import './components/index.css';
+import { isMobileWebkit } from './utility';
 
 declare var require: any;
 
@@ -14,7 +15,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     typeof window.IntersectionObserver === 'undefined'
       ? require('intersection-observer')
       : Promise.resolve(),
-    typeof window.MediaRecorder === 'undefined'
+    typeof window.MediaRecorder === 'undefined' && isMobileWebkit()
       ? require('audio-recorder-polyfill')
       : Promise.resolve(),
   ];
