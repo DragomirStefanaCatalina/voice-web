@@ -15,12 +15,16 @@ document.addEventListener('DOMContentLoaded', async () => {
     typeof window.IntersectionObserver === 'undefined'
       ? require('intersection-observer')
       : Promise.resolve(),
-    typeof window.MediaRecorder === 'undefined' && isMobileSafari()
+    typeof window.MediaRecorder === 'undefined'
       ? require('audio-recorder-polyfill')
       : Promise.resolve(),
   ];
   const [_, AudioRecorder] = await Promise.all(deferredPolyfills);
-  if (AudioRecorder) window.MediaRecorder = AudioRecorder.default;
+  if (AudioRecorder) {
+    alert('MediaRecorder polyfill loaded:');
+    window.MediaRecorder = AudioRecorder.default;
+    alert(typeof MediaRecorder);
+  }
   const App = require('./components/app').default;
   render(React.createElement(App), document.getElementById('root'));
 });
